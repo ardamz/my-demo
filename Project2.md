@@ -246,7 +246,7 @@ mysql>  SELECT * FROM sampleDB.todo_list;
 ```
 > And the output was as shown below.
 
-![Screenshot](https://github.com/ardamz/my-demo/blob/main/project2/Write2D.png)
+![Screenshot](https://github.com/ardamz/my-demo/blob/main/project2/Write2DB.png)
 
 After validating entries to the database, i exited the mysql console.
 
