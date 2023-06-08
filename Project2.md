@@ -9,7 +9,7 @@ To update the OS repositories, I ran the following codes
 ```bash
 sudo apt update
 ```
-![Screenshot](https://github.com/ardamz/my-demo/blob/main/project2/Update.png)
+![Screenshot](https://github.com/ardamz/my-demo/blob/main/project2/update.png)
 
 
 
