@@ -13,10 +13,9 @@
  ```bash 
 sudo gdisk /dev/xvdf
 ```
-
+3. I ran the `lsblk` command to view the newly configured partition on each of the 3 disks on the server.
 ![Screenshot](https://github.com/ardamz/my-demo/blob/main/project7/NewPartition.png)
 
-3. I ran the `lsblk` command to view the newly configured partition on each of the 3 disks on the server.
 
 4. I installed the `lvm2` utility by running;
 ```bash
@@ -167,7 +166,7 @@ To install a mysql-server which will serve as the database of the stack, I ran t
 ```bash
 sudo apt install mysql-server -y
 ```
-![Screenshot](https://github.com/ardamz/my-demo/blob/main/project2/InstallMysql.png)
+![Screenshot](https://github.com/ardamz/my-demo/blob/main/project7/InstallMysql.png)
 
 To verify mysql-server is running and to change the password for the root user:
 
@@ -185,14 +184,14 @@ ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Password
  
  exit
  ```
-![Screenshot](https://github.com/ardamz/my-demo/blob/main/project2/webaccess.png)
+![Screenshot](https://github.com/ardamz/my-demo/blob/main/project7/webaccess.png)
 
 I then changed the `bind-address` in the my mysql config using the vim command,
 
 ```bash
 sudo vi /etc/mysql/mysql.conf.d/mysqld.cnf
 ```
-![Screenshot](https://github.com/ardamz/my-demo/blob/main/project2/bind-address.png)
+![Screenshot](https://github.com/ardamz/my-demo/blob/main/project7/bind-address.png)
 
 
 
