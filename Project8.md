@@ -1,20 +1,69 @@
-# DevOps Tooling Website Solution
+# Load Balancer Solution With Apache
 
- ## A.  **Preparing The NFS Server**
+ ## A.  **Configure Apache As a Load Balancer**
 
-> I utilised AWS EC2 as my server for this project. 
-
-1. I created 3 additional volumes and attched them to the NFS server.
-
-![Screenshot](https://github.com/ardamz/my-demo/blob/main/project7/Volumes.png)
+> I utilised my infrastructure from project 7 for this. 
 
 
-2. I used the `gdisk` utility to create a single partition on each of the 3 disks for  the NFS Web Server.
+
+
+
+
+
+1. I created a new ubuntu ec2 instance named ` Project-8-apache-lb`, and ran the following commands;
  ```bash 
-sudo gdisk /dev/xvdf
+sudo yum update
+sudo apt install apache2 -y
+sudo apt-get install libxml2-dev -y
+
+#Enable following modules:
+sudo a2enmod rewrite
+sudo a2enmod proxy
+sudo a2enmod proxy_balancer
+sudo a2enmod proxy_http
+sudo a2enmod headers
+sudo a2enmod lbmethod_bytraffic
+
+#Restart apache2 service
+sudo systemctl restart apache2
+
+#Confirm Apache is running
+sudo systemctl status apache2
 ```
+
+![Screenshot](https://github.com/ardamz/my-demo/blob/main/project8/update.png)
+
+![Screenshot](https://github.com/ardamz/my-demo/blob/main/project8/InstallApache.png)
+
+![Screenshot](https://github.com/ardamz/my-demo/blob/main/project8/ApacheStatus.png)
+
+2. I updated the apache config file by running.
+ ```bash 
+sudo vi /etc/apache2/sites-available/000-default.conf
+```
+and inserted the following lines of code
+
+```bash
+<Proxy "balancer://mycluster">
+               BalancerMember http://172.31.26.202:80 loadfactor=5 timeout=1
+               BalancerMember http://172.31.28.30:80 loadfactor=5 timeout=1
+               ProxySet lbmethod=bytraffic
+               # ProxySet lbmethod=byrequests
+        </Proxy>
+
+        ProxyPreserveHost On
+        ProxyPass / balancer://mycluster/
+        ProxyPassReverse / balancer://mycluster/
+```
+>To effect this changes, I restared the apache service `sudo systemctl restart apache2`
+![Screenshot](https://github.com/ardamz/my-demo/blob/main/project8/ApacheConfig.png)
+
+
+
+
+
 3. I ran the `lsblk` command to view the newly configured partition on each of the 3 disks on the server.
-![Screenshot](https://github.com/ardamz/my-demo/blob/main/project7/NewPartition.png)
+![Screenshot](https://github.com/ardamz/PersonalDemos/blob/main/7.%20DevOps%20Tooling%20Website%20Solution/NewPartition.png)
 
 
 4. I installed the `lvm2` utility by running;
@@ -33,7 +82,7 @@ sudo pvcreate /dev/xvdf1 /dev/xvdg1 /dev/xvdh1
 
 > I verified creation PVs by running ` sudo pvs`
 
-![Screenshot](https://github.com/ardamz/my-demo/blob/main/project7/PhysicalVolumes.png)
+![Screenshot](https://github.com/ardamz/PersonalDemos/blob/main/7.%20DevOps%20Tooling%20Website%20Solution/PhysicalVolumes.png)
 
 6.  I used the `vgcreate` utility to add all 3 PVs to a volume group (VG) called `nfsdata-vg`
 
@@ -41,7 +90,7 @@ sudo pvcreate /dev/xvdf1 /dev/xvdg1 /dev/xvdh1
 sudo vgcreate nfsdata-vg /dev/xvdh1  /dev/xvdg1 /dev/xvdf1
 ```
 
-![Screenshot](https://github.com/ardamz/my-demo/blob/main/project7/VGCreate.png)
+![Screenshot](https://github.com/ardamz/PersonalDemos/blob/main/7.%20DevOps%20Tooling%20Website%20Solution/VGCreate.png)
 
 7. On the NFS Server, I used the `lvcreate` utility to create 3 logical volumes. apps-lv, opt-lv and logs-lv of equal size from the `nfsdata-vg`. 
 
@@ -57,16 +106,16 @@ opt-lv will be used to store data for the Website while, logs-lv will be used to
 
 [apps-lv and logs-lv will be used to store data for the Website while, logs-lv will be used to store data for logs.]: 
 
-![Screenshot](https://github.com/ardamz/my-demo/blob/main/project7/lvcreate.png)
+![Screenshot](https://github.com/ardamz/PersonalDemos/blob/main/7.%20DevOps%20Tooling%20Website%20Solution/lvcreate.png)
 > I verified creation LVs by running ` sudo lvs`
 
-![Screenshot](https://github.com/ardamz/my-demo/blob/main/project7/sudoLVS.png)
+![Screenshot](https://github.com/ardamz/PersonalDemos/blob/main/7.%20DevOps%20Tooling%20Website%20Solution/sudoLVS.png)
 >  had to edit the host name for easier identification.
 
 
 8. I verfied my setup so far by running `sudo lsblk`
 
-![Screenshot](https://github.com/ardamz/my-demo/blob/main/project7/FinalSetup.png)
+![Screenshot](https://github.com/ardamz/PersonalDemos/blob/main/7.%20DevOps%20Tooling%20Website%20Solution/FinalSetup.png)
 >looking good...
 
 9. using the `mkfs` utility, I formated the Logical Volumes (LVs) on the NFS server with the `xfs` filsesystem.
@@ -77,7 +126,7 @@ sudo mkfs -t xfs /dev/nfsdata-vg/lv-logs
 sudo mkfs -t xfs /dev/nfsdata-vg/lv-opt
 ```
 
-![Screenshot](https://github.com/ardamz/my-demo/blob/main/project7/FileSystem.png)
+![Screenshot](https://github.com/ardamz/PersonalDemos/blob/main/7.%20DevOps%20Tooling%20Website%20Solution/FileSystem.png)
 
 
 10. On the NFS Server, using the `mkdir` command I created the `/mnt/logs`, `/mnt/apps` and `/mnt/opt` directory to serve as mount points for the LVs created above
@@ -85,7 +134,7 @@ sudo mkfs -t xfs /dev/nfsdata-vg/lv-opt
 ```bash
 sudo mkdir /mnt/apps /mnt/logs /mnt/opt
 ```
-![Screenshot](https://github.com/ardamz/my-demo/blob/main/project7/mkdir.png)
+![Screenshot](https://github.com/ardamz/PersonalDemos/blob/main/7.%20DevOps%20Tooling%20Website%20Solution/mkdir.png)
 
 
 11. On the NFS Server, I created mount points on `/mnt` directory for the logical volumes as follow:
@@ -98,11 +147,11 @@ sudo mount /dev/nfsdata-vg/lv-apps /mnt/apps
 sudo mount /dev/nfsdata-vg/lv-logs /mnt/logs
 sudo mount /dev/nfsdata-vg/lv-opt /mnt/opt
 ```
-![Screenshot](https://github.com/ardamz/my-demo/blob/main/project7/Mount.png)
+![Screenshot](https://github.com/ardamz/PersonalDemos/blob/main/7.%20DevOps%20Tooling%20Website%20Solution/Mount.png)
 
 12. I then verified my setup by running the `df -hT` comand as shown below.
 
-![Screenshot](https://github.com/ardamz/my-demo/blob/main/project7/dfh.png)
+![Screenshot](https://github.com/ardamz/PersonalDemos/blob/main/7.%20DevOps%20Tooling%20Website%20Solution/dfh.png)
 
 
 
@@ -121,7 +170,7 @@ sudo systemctl start nfs-server.service
 sudo systemctl enable nfs-server.service
 sudo systemctl status nfs-server.service
 ```
-![Screenshot](https://github.com/ardamz/my-demo/blob/main/project7/nfs-status.png)
+![Screenshot](https://github.com/ardamz/PersonalDemos/blob/main/7.%20DevOps%20Tooling%20Website%20Solution/nfs-status.png)
 
 3. I then set up permission that will allow our Web servers to read, write and execute files on NFS:
 
@@ -138,9 +187,9 @@ sudo systemctl restart nfs-server.service
 sudo vi /etc/exports
 sudo exportfs -arv
 ```
-![Screenshot](https://github.com/ardamz/my-demo/blob/main/project7/exports.png)
+![Screenshot](https://github.com/ardamz/PersonalDemos/blob/main/7.%20DevOps%20Tooling%20Website%20Solution/exports.png)
 
-![Screenshot](https://github.com/ardamz/my-demo/blob/main/project7/exportfs.png)
+![Screenshot](https://github.com/ardamz/PersonalDemos/blob/main/7.%20DevOps%20Tooling%20Website%20Solution/exportfs.png)
 
 
 
@@ -150,11 +199,11 @@ sudo exportfs -arv
 rpcinfo -p | grep nfs
 ```
 
-![Screenshot](https://github.com/ardamz/my-demo/blob/main/project7/nfs_port4SG.png)
+![Screenshot](https://github.com/ardamz/PersonalDemos/blob/main/7.%20DevOps%20Tooling%20Website%20Solution/nfs_port4SG.png)
 > In order for NFS server to be accessible from the client, I also opened following ports: TCP 111, UDP 111, UDP 2049.
 
 
-<!-- ![Screenshot](https://github.com/ardamz/my-demo/blob/main/project7/SG_rules.png) -->
+<!-- ![Screenshot](https://github.com/ardamz/PersonalDemos/blob/main/7.%20DevOps%20Tooling%20Website%20Solution/SG_rules.png) -->
 
 
 ## C.  **Installing And Configure DB Servers**
@@ -166,7 +215,7 @@ To install a mysql-server which will serve as the database of the stack, I ran t
 ```bash
 sudo apt install mysql-server -y
 ```
-![Screenshot](https://github.com/ardamz/my-demo/blob/main/project7/InstallMysql.png)
+![Screenshot](https://github.com/ardamz/PersonalDemos/blob/main/7.%20DevOps%20Tooling%20Website%20Solution/InstallMysql.png)
 
 To verify mysql-server is running and to change the password for the root user:
 
@@ -174,6 +223,7 @@ To verify mysql-server is running and to change the password for the root user:
 sudo mysql 
 ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Password@1';
 
+```bash
  mysql> CREATE DATABASE tooling;
  
  mysql> CREATE USER 'webaccess'@'172.31.16.0/20' IDENTIFIED WITH mysql_native_password BY 'password';
@@ -183,14 +233,14 @@ ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Password
  
  exit
  ```
-![Screenshot](https://github.com/ardamz/my-demo/blob/main/project7/webaccess.png)
+![Screenshot](https://github.com/ardamz/PersonalDemos/blob/main/7.%20DevOps%20Tooling%20Website%20Solution/webaccess.png)
 
 I then changed the `bind-address` in the my mysql config using the vim command,
 
 ```bash
 sudo vi /etc/mysql/mysql.conf.d/mysqld.cnf
 ```
-![Screenshot](https://github.com/ardamz/my-demo/blob/main/project7/bind-address.png)
+![Screenshot](https://github.com/ardamz/PersonalDemos/blob/main/7.%20DevOps%20Tooling%20Website%20Solution/bind-address.png)
 
 
 
@@ -205,7 +255,7 @@ sudo vi /etc/mysql/mysql.conf.d/mysqld.cnf
 sudo yum install nfs-utils nfs4-acl-tools -y
 ```
 
-![Screenshot](https://github.com/ardamz/my-demo/blob/main/project7/utils.png)
+![Screenshot](https://github.com/ardamz/PersonalDemos/blob/main/7.%20DevOps%20Tooling%20Website%20Solution/utils.png)
 
 3. I created a `/var/www`directory to serve as a mount point for the NFS servers export for apps.
 
@@ -216,7 +266,7 @@ sudo mount -t nfs -o rw,nosuid 172.31.24.217:/mnt/logs /var/log/httpd
 ```
 >the second command was actually executed after installing apache.
 
-![Screenshot](https://github.com/ardamz/my-demo/blob/main/project7/mount_www.png)
+![Screenshot](https://github.com/ardamz/PersonalDemos/blob/main/7.%20DevOps%20Tooling%20Website%20Solution/mount_www.png)
 
 4. I ran the `df -h`command to verify the mount point. To ensure the changes will persist after reboot, i updated the `/etc/fstab`file by adding the line below.
 
@@ -254,7 +304,7 @@ sudo vi /etc/sysconfig/selinux
 
 7. I put the public IP address of any/all of the web servers in my browser, and i was able to get the default apache webpage.
 
-![Screenshot](https://github.com/ardamz/my-demo/blob/main/project7/default-page.png)
+![Screenshot](https://github.com/ardamz/PersonalDemos/blob/main/7.%20DevOps%20Tooling%20Website%20Solution/default-page.png)
 
 8. On the web-server, I cloned the `tooling` repository from my github by running the following command;
 
@@ -269,7 +319,7 @@ sudo cp -R html /var/www
 ```
 9. Refreshing the webpages from step 7 above, I got the content that was cloned from the tooling repository.
 
-![Screenshot](https://github.com/ardamz/my-demo/blob/main/project7/new-page.png)
+![Screenshot](https://github.com/ardamz/PersonalDemos/blob/main/7.%20DevOps%20Tooling%20Website%20Solution/new-page.png)
 
 
 10. I installed mysql client on the web servers by running,
@@ -279,11 +329,11 @@ sudo dnf install mysql -y
 ```
 11. I updated the website’s configuration (`/var/www/html/functions.php`) file to connect to the database.
 
-![Screenshot](https://github.com/ardamz/my-demo/blob/main/project7/website-config.png)
+![Screenshot](https://github.com/ardamz/PersonalDemos/blob/main/7.%20DevOps%20Tooling%20Website%20Solution/website-config.png)
 
 12. I went to AWS, and updated the security group of the DB Server to allow MYSQL traffic from the webservers.
 
-![Screenshot](https://github.com/ardamz/my-demo/blob/main/project7/db-access.png)
+![Screenshot](https://github.com/ardamz/PersonalDemos/blob/main/7.%20DevOps%20Tooling%20Website%20Solution/db-access.png)
 
 13. I then applied the `tooling-db.sql` script from the cloned git repo to the database by running the coomand below, ands supplying the password when prompted.
 
@@ -294,7 +344,7 @@ mysql -h '172.31.3.3' -u 'webaccess' -p tooling < tooling-db.sql
 14. I reloaded the webpage for any of the webservers, and supplied the following credentials `username: admin`and `password: admin`.
 >This credentials were included in the `tooling-db.sql` script.
 
-![Screenshot](https://github.com/ardamz/my-demo/blob/main/project7/landing-page.png)
+![Screenshot](https://github.com/ardamz/PersonalDemos/blob/main/7.%20DevOps%20Tooling%20Website%20Solution/landing-page.png)
 
 15. I created in MySQL a new admin user with `username: myuser` and `password: password` by running the following commands on any of the webservers
 
@@ -309,19 +359,6 @@ mysql> INSERT INTO `users` (
 
 16. I reloaded the webpage for any of the webservers, and supplied the following credentials `username: myuser` and `password: password`, and i was able to login.
 
-![Screenshot](https://github.com/ardamz/my-demo/blob/main/project7/myuser.png)
-
-
-
-
-
-
-
-
-
-
-
-
-
+![Screenshot](https://github.com/ardamz/PersonalDemos/blob/main/7.%20DevOps%20Tooling%20Website%20Solution/myuser.png)
 
 
