@@ -1,0 +1,61 @@
+# Continous Integration Pipeline For Tooling Website
+
+ ## STEP 1.  **Provision Jenkins Server**
+
+
+1. I created an EC2 instance based on Ubuntun 22.04 adn named it `Jenkins`, to install Jenkins, I ran the following commands;
+ ```bash 
+ # Install JDK
+sudo apt update
+sudo apt install default-jdk-headless -y
+
+# Install Jenkins:
+curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | sudo tee \
+  /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+sudo apt-get update
+sudo apt-get install jenkins
+
+#Confirm Jenkins is running
+sudo systemctl status jenkins
+```
+
+![Screenshot](https://github.com/ardamz/my-demo/blob/main/project9/update.png)
+
+![Screenshot](https://github.com/ardamz/my-demo/blob/main/project/InstallJenkins.png)
+
+![Screenshot](https://github.com/ardamz/my-demo/blob/main/project9/JenkinsStatus.png)
+
+2. I confirmed the installation by pasting the public IP address of the `Jenkins Server` in a web brwoser along with the default port (8080) which Jenkins uses.
+![Screenshot](https://github.com/ardamz/my-demo/blob/main/project9/JenkinsHome.png)
+
+3. I performed the initial setup by first getting the Admin password by running 
+```bash
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+```
+then i installed plugins, created an admin user and was done with the inital setup.
+
+>To effect this changes, I restarted the apache service `sudo systemctl restart apache2`
+![Screenshot](https://github.com/ardamz/my-demo/blob/main/project9/AddUser.png)
+![Screenshot](https://github.com/ardamz/my-demo/blob/main/project9/SetupComplete.png)
+
+ ## STEP 2.  **Configure Jenkins to retrieve source codes from GitHub using Webhooks**
+3. I verified my setup thus far by putting the public IP address of the LoadBalancer in the browser and voila!!!
+![Screenshot](https://github.com/ardamz/my-demo/blob/main/project8/LB-PublicIP.png)
+
+
+4. On each of the web-servers, I unmounted the logs directory from the `/mnt/logs` directory on the NFS Server by running;
+```bash
+sudo umount -l /var/log/httpd
+```
+> used the -l as it was returning a mount point busy error.
+
+5. I restarted both servers and anytime i refreshed webpage of the loadbalancer  I was able to read their access logs (increasing in turns) by running 
+```bash
+sudo tail -f /var/log/httpd/access_log
+```
+![Screenshot](https://github.com/ardamz/my-demo/blob/main/project9/LocalLogs.png)
+
+NOTES: This was an interesting one as i learnt of the various Load balancing comcepts and some scenarios where they can be deployed.
