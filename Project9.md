@@ -47,9 +47,13 @@ then i installed plugins, created an admin user and was done with the inital set
 ![Screenshot](https://github.com/ardamz/my-demo/blob/main/project8/Webhook.png)
 
 
-2. Logged into my jenkins server as tthe admin user, then from the dashboard I selected `Create a job` and selected the `Fresstyle Project` option
+2. Logged into my jenkins server as tthe admin user, then from the dashboard I selected `Create a job` put in a project name, selected the `Fresstyle Project` option and the pressed the OK button.
 
+3. On the configuration page, I supplied the the github repository (didn't supply the credential as the repository i was using was set as public and not private.), selected a build trigger and post0build action as shown below.
 
+![Screenshot](https://github.com/ardamz/my-demo/blob/main/project9/GitRepo.png)
+![Screenshot](https://github.com/ardamz/my-demo/blob/main/project9/BuildTrigger.png)
+![Screenshot](https://github.com/ardamz/my-demo/blob/main/project9/PostBuild.png)
 
 czxcOn each of the web-servers, I unmounted the logs directory from the `/mnt/logs` directory on the NFS Server by running;
 ```bash
