@@ -66,19 +66,11 @@ then i installed plugins, created an admin user and was done with the inital set
 
 2. From the Jenkins Dashboard>Manage Jenkins>System I scrolled down to the `Publish over SSH` section and supplied the following details;
   A. Private key used to connect to the NFS Server
+
   B. Details of the NFS Server like username, hostname and remote directory.
+
+
 ![Screenshot](https://github.com/ardamz/my-demo/blob/main/project9/ConfigureSSH.png)
 
 
-```bash
-sudo umount -l /var/log/httpd
-```
-> used the -l as it was returning a mount point busy error.
 
-5. I restarted both servers and anytime i refreshed webpage of the loadbalancer  I was able to read their access logs (increasing in turns) by running 
-```bash
-sudo tail -f /var/log/httpd/access_log
-```
-![Screenshot](https://github.com/ardamz/my-demo/blob/main/project9/LocalLogs.png)
-
-NOTES: This was an interesting one as i learnt of the various Load balancing comcepts and some scenarios where they can be deployed.
