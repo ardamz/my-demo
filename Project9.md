@@ -41,7 +41,7 @@ then i installed plugins, created an admin user and was done with the inital set
 ![Screenshot](https://github.com/ardamz/my-demo/blob/main/project9/AddUser.png)
 ![Screenshot](https://github.com/ardamz/my-demo/blob/main/project9/SetupComplete.png)
 
- ## STEP 2.  **Configure Jenkins to retrieve source codes from GitHub using Webhooks**
+## STEP 2.  **Configure Jenkins to retrieve source codes from GitHub using Webhooks**
 
 1. logged into my github account and went into the settings tab for this projects repository and selected the webhook option from the menus on the left the clicked the `Add Webhook` button. I put in the public IP Address of the jenkins server in the payload url, changed the `content type` and left every other setting as default.
 ![Screenshot](https://github.com/ardamz/my-demo/blob/main/project8/Webhook.png)
@@ -49,13 +49,27 @@ then i installed plugins, created an admin user and was done with the inital set
 
 2. Logged into my jenkins server as tthe admin user, then from the dashboard I selected `Create a job` put in a project name, selected the `Fresstyle Project` option and the pressed the OK button.
 
-3. On the configuration page, I supplied the the github repository (didn't supply the credential as the repository i was using was set as public and not private.), selected a build trigger and post0build action as shown below.
+3. On the configuration page, I supplied the the github repository (didn't supply the credential as the repository i was using was set as public and not private.), selected a build trigger and post_build action as shown below.
 
 ![Screenshot](https://github.com/ardamz/my-demo/blob/main/project9/GitRepo.png)
 ![Screenshot](https://github.com/ardamz/my-demo/blob/main/project9/BuildTrigger.png)
 ![Screenshot](https://github.com/ardamz/my-demo/blob/main/project9/PostBuild.png)
 
-czxcOn each of the web-servers, I unmounted the logs directory from the `/mnt/logs` directory on the NFS Server by running;
+4. After the configutation, clicking on the `Build Now` button increases the build history of the project. This shows that the project configuration is okay, the git configutation supplied in step 3 above was to enable an automatic triggering of the build process (any commit on the github repo, triggers a build process in jenkins).
+![Screenshot](https://github.com/ardamz/my-demo/blob/main/project9/AutoBuild.png)
+
+## STEP 3.  **Configure Jenkins to copy files to NFS server via SSH**
+
+1. From the Jenkins Dashboard>Manage Jenkins>Plugins I installed (without restart) “Publish Over SSH” plugin from the list of available plugins.
+
+![Screenshot](https://github.com/ardamz/my-demo/blob/main/project9/PublishOverSSH.png)
+
+2. From the Jenkins Dashboard>Manage Jenkins>System I scrolled down to the `Publish over SSH` section and supplied the following details;
+  A. Private key used to connect to the NFS Server
+  B. Details of the NFS Server like username, hostname and remote directory.
+![Screenshot](https://github.com/ardamz/my-demo/blob/main/project9/ConfigureSSH.png)
+
+
 ```bash
 sudo umount -l /var/log/httpd
 ```
