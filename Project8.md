@@ -1,4 +1,3 @@
-# Load Balancer Solution With Apachegit stat
 # Load Balancer Solution With Apache
 
 
@@ -48,7 +47,7 @@ and inserted the following lines of code
         ProxyPass / balancer://mycluster/
         ProxyPassReverse / balancer://mycluster/
 ```
->To effect this changes, I restared the apache service `sudo systemctl restart apache2`
+>To effect this changes, I restarted the apache service `sudo systemctl restart apache2`
 ![Screenshot](https://github.com/ardamz/my-demo/blob/main/project8/ApacheConfig.png)
 ![Screenshot](https://github.com/ardamz/my-demo/blob/main/project8/ApacheConfig1.png)
 
@@ -67,3 +66,5 @@ sudo umount -l /var/log/httpd
 sudo tail -f /var/log/httpd/access_log
 ```
 ![Screenshot](https://github.com/ardamz/my-demo/blob/main/project8/LocalLogs.png)
+
+NOTES: This was an interesting one as i learnt of the various Load balancing comcepts and some scenarios where they can be deployed.
