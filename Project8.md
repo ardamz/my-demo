@@ -1,8 +1,9 @@
 # Load Balancer Solution With Apachegit stat
+# Load Balancer Solution With Apache
 
 
 
-1. I created a new ubuntu ec2 instance named ` Project-8-apache-lb`, and ran the following commands;
+1. Still maintaining my infrastructure from the last project, I created a new ubuntu ec2 instance named ` Project-8-apache-lb`, and ran the following commands;
  ```bash 
 sudo apt update
 sudo apt install apache2 -y
