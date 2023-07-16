@@ -42,11 +42,16 @@ then i installed plugins, created an admin user and was done with the inital set
 ![Screenshot](https://github.com/ardamz/my-demo/blob/main/project9/SetupComplete.png)
 
  ## STEP 2.  **Configure Jenkins to retrieve source codes from GitHub using Webhooks**
-3. I verified my setup thus far by putting the public IP address of the LoadBalancer in the browser and voila!!!
-![Screenshot](https://github.com/ardamz/my-demo/blob/main/project8/LB-PublicIP.png)
+
+1. logged into my github account and went into the settings tab for this projects repository and selected the webhook option from the menus on the left the clicked the `Add Webhook` button. I put in the public IP Address of the jenkins server in the payload url, changed the `content type` and left every other setting as default.
+![Screenshot](https://github.com/ardamz/my-demo/blob/main/project8/Webhook.png)
 
 
-4. On each of the web-servers, I unmounted the logs directory from the `/mnt/logs` directory on the NFS Server by running;
+2. Logged into my jenkins server as tthe admin user, then from the dashboard I selected `Create a job` and selected the `Fresstyle Project` option
+
+
+
+czxcOn each of the web-servers, I unmounted the logs directory from the `/mnt/logs` directory on the NFS Server by running;
 ```bash
 sudo umount -l /var/log/httpd
 ```
