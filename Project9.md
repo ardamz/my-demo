@@ -85,7 +85,7 @@ then i installed plugins, created an admin user and was done with the inital set
 
 4. Saved the new post-build action and went to make an update in my git repo, and the build was initiated in my jenkins enviroment automatically. I kept getting a `Permission denied` Error
 
-![Screenshot](https://github.com/ardamz/my-demo/blob/main/project9/Errors.png)
+![Screenshot](https://github.com/ardamz/my-demo/blob/main/project9/BuildErrors.png)
 
 ![Screenshot](https://github.com/ardamz/my-demo/blob/main/project9/Build8.png)
 
@@ -98,4 +98,3 @@ then i installed plugins, created an admin user and was done with the inital set
 ![Screenshot](https://github.com/ardamz/my-demo/blob/main/project9/Build9.png)
 
 ![Screenshot](https://github.com/ardamz/my-demo/blob/main/project9/CopyVerified.png)
-
