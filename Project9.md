@@ -81,5 +81,21 @@ then i installed plugins, created an admin user and was done with the inital set
 
 ![Screenshot](https://github.com/ardamz/my-demo/blob/main/project9/ConfigureSSH.png)
 
+3. After saving the SSH configuration, I went to my configuration page for my project Dashboard>project9>Configuration, and added `Send build artifacts over SSH` from the list of post-build action. I inserted `**` in the place of Source files to iindicate all files.
 
+4. Saved the new post-build action and went to make an update in my git repo, and the build was initiated in my jenkins enviroment automatically. I kept getting a `Permission denied` Error
+
+![Screenshot](https://github.com/ardamz/my-demo/blob/main/project9/Errors.png)
+
+![Screenshot](https://github.com/ardamz/my-demo/blob/main/project9/Build8.png)
+
+5. I modified the permission and ownership of the /mnt/apps directory
+
+![Screenshot](https://github.com/ardamz/my-demo/blob/main/project9/Permission.png)
+
+6. After modifing the permissions I was able to get a succesful build after a push action from my git repo. I also verified this successful build by checking the /var/www folders of my my web servers (as they are mounted on the /mnt/apps dircetory of the NFS Server).
+
+![Screenshot](https://github.com/ardamz/my-demo/blob/main/project9/Build9.png)
+
+![Screenshot](https://github.com/ardamz/my-demo/blob/main/project9/CopyVerified.png)
 
