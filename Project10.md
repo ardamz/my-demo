@@ -47,10 +47,10 @@ sudo systemctl status nginx
 ![Screenshot](https://github.com/ardamz/my-demo/blob/main/project10/NginxConfig.png)
 
 3. To setup my domain, I took the following steps;
-    A. Registered the `ardamz.uk` domain.
-    B. I created a hosted zone for `ardamz.uk` in AWS Route 53.
-    C. I updated the name servers for `ardamz.uk` with those from AWS Route 53
-    D. In the hosted zone, I created A records for `ardamz.uk` and `www.ardamz.uk` both pointing to the public IP address of my Load Balancer
+  * Registered the `ardamz.uk` domain.
+  * I created a hosted zone for `ardamz.uk` in AWS Route 53.
+  * I updated the name servers for `ardamz.uk` with those from AWS Route 53
+  * In the hosted zone, I created A records for `ardamz.uk` and `www.ardamz.uk` both pointing to the public IP address of my Load Balancer
 
 ![Screenshot](https://github.com/ardamz/my-demo/blob/main/project10/Route53.png)
 
