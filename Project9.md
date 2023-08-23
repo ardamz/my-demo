@@ -3,7 +3,7 @@
  ## STEP 1.  **Provision Jenkins Server**
 
 
-1. I created an EC2 instance based on Ubuntun 22.04 adn named it `Jenkins`, to install Jenkins, I ran the following commands;
+1. I created an EC2 instance based on Ubuntu 22.04 adn named it `Jenkins`, to install Jenkins, I ran the following commands;
  ```bash 
  # Install JDK
 sudo apt update
