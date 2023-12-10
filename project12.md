@@ -6,10 +6,11 @@
 
 ```bash
 # Create the directory
-sudo mkdir /home/ubuntu/ansible-config-artifact
+# The home directory wasnt working for me, had to improvise
+sudo mkdir /var/lib/jenkins/ansible-config-artifact
 
 # Modify its permissions
-sudo chmod -R 0777 /home/ubuntu/ansible-config-artifact
+sudo chmod -R 0777 /var/lib/jenkins/ansible-config-artifact
 ```
 
  ![Screenshot](https://github.com/ardamz/my-demo/blob/main/project12/Mkdir.png)
@@ -24,7 +25,7 @@ sudo chmod -R 0777 /home/ubuntu/ansible-config-artifact
 # Tried everything i could to make to home diorectory work, but its not...i give up.
 ```
 
-
+## STEP 2.  **Refactor Ansible code by importing other playbooks into site.ymlRefactor Ansible code by importing other playbooks into `site.yml`**
 
 
 
