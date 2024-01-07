@@ -120,3 +120,5 @@ I ran the `terraform plan` and `terraform apply` commands to create the same inf
 
 
 ![Screenshot](https://github.com/ardamz/my-demo/blob/main/Project16/ConsoleView.png)
+
+I was able to learn the basics of using terraform, and the benefits of using variables were possible. Hopefully this knowledge will come to play in one or more of my projects down the line.
