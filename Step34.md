@@ -1,7 +1,7 @@
 # Continous Integration Pipeline For Tooling Website
 
  ## STEP 1.  **Base infrastructure automation (VPC | Subnets)**
-In my project file, i created a `main.tf` file, inserted the codes below, then ran the `terraform init` command the initialize terrfaorm in that directory.
+In my project file, I created a `main.tf` file, inserted the codes below, then ran the `terraform init` command the initialize terrfaorm in that directory.
 
 1. I created an EC2 instance based on Ubuntun 22.04 and named it `Jenkins`, to install Jenkins, I ran the following commands;
  ```bash 
@@ -19,7 +19,7 @@ resource "aws_vpc" "main" {
 
 ![Screenshot](https://github.com/ardamz/my-demo/blob/main/Project16/TerraformInit.png)
 
-2. I ran the `terraform plan` command to see a preview of what terraform intends to create, once i was happy with it, i ran the `terraform apply` command.
+2. I ran the `terraform plan` command to see a preview of what terraform intends to create, once I was happy with it, I ran the `terraform apply` command.
 
 ![Screenshot](https://github.com/ardamz/my-demo/blob/main/Project16/TerraformPlan.png)
 
@@ -52,7 +52,7 @@ I pasted the code above into the `main.tf` file and ran the `terraform plan` and
 
 ![Screenshot](https://github.com/ardamz/my-demo/blob/main/Project16/Subnets.png)
 
-In this scenario, the value of the  `cidr_block` and `availability_zone` were hardcoded, and this iis not the best practice. This will be resolved by refactoring the coding and making use of variables.
+In this scenario, the value of the  `cidr_block` and `availability_zone` were hardcoded, and this is not the best practice. This will be resolved by refactoring the coding and making use of variables.
 
 2. I ran the `terraform destroy` command to delete the current infrastructure in preparation for the new one.
 
@@ -76,7 +76,7 @@ I also updated the `main.tf` file accordingly and ran the `terraform apply` comm
 ![Screenshot](https://github.com/ardamz/my-demo/blob/main/Project16/TerraformApply2.png)
 
 
-3. To prevent hardcoding the `cidr_block`, I had to make use of the `cidrsubnet()` function, I updated the main.tf` file with the codes below.
+3. To prevent hardcoding the `cidr_block`, I had to make use of the `cidrsubnet()` function, I updated the `main.tf` file with the codes below.
 
 ```bash
 # Get list of availability zones
@@ -107,8 +107,8 @@ resource "aws_subnet" "public" {
 }
 ```
 I also updated the `count` argument with a condition that allows terraform to check the following conditions
-    1. first if the `preferred_number_of_public_subnets` in the variables is set to null, the number of AZs is used, this is dervived by the `length(data.aws_availability_zones.available.names)` function, else
-    2. The `preferred_number_of_public_subnets` defined in the varibales is used.
+1. first if the `preferred_number_of_public_subnets` in the variables is set to null, the number of AZs is used, this is dervived by the `length(data.aws_availability_zones.available.names)` function, else
+2. The `preferred_number_of_public_subnets` defined in the varibales is used.
 
 I ran the `terraform plan` and `terraform apply` commands to create the same infrastructure only this time there is no hardcoded values in my main code, ther ahve all been defined as variables and defined terrin the `variables.tf` file
 
